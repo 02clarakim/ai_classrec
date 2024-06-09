@@ -85,48 +85,19 @@ import ResultsPage from './components/results/ResultsPage';
 function App() {
     const [showResults, setShowResults] = useState(false);
     const [studentData, setStudentData] = useState({});
+    const [recResultData, setRecResultData] = useState({});
 
-    // const fetchAPI = async() => {
-    //   const response = await axios.get("http://localhost:5000/api/studentData");
-    //   console.log(response.data)
-    //   setdata(response.data);
-    //   console.log("HI")
-    //   console.log(data);
-    //   console.log(data.Name);
-    // }
-
-    // useEffect(() => {
-    //   fetchAPI()
-    // }, [])
-
-    function handleGenerate(data) {
-      setStudentData(data);
+    function handleGenerate(studentData, recData) {
+      setStudentData(studentData);
       setShowResults(true);
+      setRecResultData(recData)
     }
-
-    // Using useEffect for single rendering
-    // useEffect(() => {
-    //   fetch("/data")
-    //       .then((res) => res.json())
-    //       .then((data) => {
-    //           setdata({
-    //               name: data.Name,
-    //               age: data.Age,
-    //               date: data.Date,
-    //               programming: data.programming,
-    //           });
-    //       })
-    //       .catch((err) => {
-    //           console.error("Error fetching data: ", err);
-    //       });
-    // }, []);
  
     return (
       // <LandingPage onGenerate={handleGenerate}/>
       <>
         {showResults ? (
-              <ResultsPage inputData={studentData}/>
-              // <ResultsPage name="John Doe" sID={studentID} level="Sophomore" tier="Tier I" major="Pre-Law"/>
+              <ResultsPage inputData={studentData} classRecArr={recResultData}/>
             ) : (
               <LandingPage onGenerate={handleGenerate}/>
             )}

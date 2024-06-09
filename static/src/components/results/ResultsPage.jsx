@@ -5,7 +5,7 @@ import RecOutput from "./RecOutput";
 import bgImage from '../../assets/yonsei-bg.jpg';
 import { getStudentInfo  } from "../../assets/StudentDB";
 
-export default function ResultsPage({ inputData }) {
+export default function ResultsPage({ inputData, classRecArr }) {    
     const inputID = inputData.studentID;
     const inputCollege = inputData.desiredCollege;
     const inputField = inputData.desiredField;
@@ -25,7 +25,7 @@ export default function ResultsPage({ inputData }) {
             </div>
             <div className="w-2/3 p-10 flex flex-row items-start justify-between">
                 <ClassesTaken studentInfo={studentInfoAll}/>
-                <RecOutput />
+                <RecOutput classRecArr={classRecArr} grade={studentLevel}/>
             </div>
             
         </div>

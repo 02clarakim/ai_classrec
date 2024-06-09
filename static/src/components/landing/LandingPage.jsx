@@ -39,13 +39,13 @@ export default function LandingPage({ onGenerate }) {
     }
 
     async function handleGenerate() {
-        if (getStudentInfo(formData.studentID) == null) {
+        if (!getStudentInfo(formData.studentID)) {
             setErrorType('invalidID');
             error.current.open();
             return;
         }
 
-        for (const [key, value] of Object.entries(formData)) {
+        for (const value of Object.values(formData)) {
             if (value === '') {
                 setErrorType('incomplete');
                 error.current.open();
@@ -54,7 +54,6 @@ export default function LandingPage({ onGenerate }) {
         }
         
         setErrorType('');
-        // onGenerate(formData);
         try {
             const response = await fetch('http://127.0.0.1:5000/receiveData', {
                 method: 'POST',
@@ -67,8 +66,8 @@ export default function LandingPage({ onGenerate }) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            console.log(data);
-            onGenerate(data);
+            // formData = studentData, data = recommended array
+            onGenerate(formData, data)
         } catch (error) {
             console.error('Error:', error);
             setErrorType('network');
@@ -80,10 +79,14 @@ export default function LandingPage({ onGenerate }) {
         <>  
             <ErrorMsg ref={error} buttonCaption="Close">
                 <h2 className="text-xl font-bold text-stone-700 my-4">
-                    {errorType === 'incomplete' ? 'Incomplete Input' : 'Invalid Student ID'}
+                    {errorType === 'incomplete' ? 'Incomplete Input' : 
+                     errorType === 'invalidID' ? 'Invalid Student ID' : 
+                     'Network Error'}
                 </h2>
                 <p className="text-stone-600 mb-4">
-                    {errorType === 'incomplete' ? 'Please make sure you provide a valid value for every input field.' : 'Please enter a valid student ID.'}
+                    {errorType === 'incomplete' ? 'Please make sure you provide a valid value for every input field.' : 
+                     errorType === 'invalidID' ? 'Please enter a valid student ID.' : 
+                     'There was a problem with the network. Please try again later.'}
                 </p>
             </ErrorMsg>
             <div className="flex flex-col items-center justify-center h-screen bg-cover bg-center bg-opacity-10"
