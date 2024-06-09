@@ -73,49 +73,6 @@ def predict(form_data, student_info):
     
     return model(data)
 
-    # data = tf.constant([[cumGPA, pastGPA, credits, attendRate]], dtype=tf.float32)
-    # return model(data)
-
-# , methods=['GET', 'POST']
-# @app.route("/")
-# def serve():
-#     # if request.method == 'GET':
-#     return send_from_directory(app.static_folder, "index.html")
-
-# @app.route('/<path:path>', methods=['GET'])
-# def static_proxy(path):
-#     return send_from_directory(app.static_folder, path)
-    # if request.method == 'POST':
-    #     gender = float(request.form['gender'])
-    #     race = float(request.form['race'])
-    #     desiredCollege = float(request.form['desiredCollege'])
-    #     desiredField = float(request.form['desiredField'])
-    #     firstGenStatus = float(request.form['firstGenStatus'])
-    #     parentsIncome = float(request.form['parentsIncome'])
-
-    #     data = {
-    #         'gender': gender,
-    #         "race" : race,
-    #         "desiredCollege": desiredCollege,
-    #         "desiredField": desiredField,
-    #         "firstGenStatus": firstGenStatus,
-    #         "parentsIncome": parentsIncome
-    #     }
-        
-    #     # performance = predict(cumGPA, pastGPA, credits, attendRate)
-    #     return jsonify(data)
-        # return render_template('index.html', performance=performance[0, 0].numpy())
-
-# Route for seeing a data
-# @app.route('/api/studentData', methods=['GET'])
-# def get_time():
-#     data = {
-#         'Name': "geek",
-#         "Age": "22",
-#         "Date": x, 
-#         "programming": "python"
-#     }
-#     return jsonify(data)
      
 # Running app
 if __name__ == '__main__':
