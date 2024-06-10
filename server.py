@@ -40,11 +40,11 @@ courses_index = {
 # data processing functions
 def get_college_tier(college):
     index = Colleges.index(college)
-    if index <= 25:
+    if index <= 20:
         return 1
-    elif index <= 60:
+    elif index <= 50:
         return 2
-    elif index <= 100:
+    elif index <= 150:
         return 3
     else:
         return 4
@@ -122,9 +122,15 @@ def receive_form_data():
     
     college_tier = get_college_tier(data.get('desiredCollege'))
 
+    field = data.get('desiredField')
+    if (field == 'Pre-Law'):
+        field = 'Humanities'
+    elif (field == 'Arts/Humanities'):
+        field = 'Arts'
+
     form_data = {
         "tier": college_tier,
-        "field": data.get('desiredField'),
+        "field": field,
         "first_gen": data.get('firstGenStatus'),
         "gender": data.get('gender'),
         "income": int(data.get('parentsIncome')),
@@ -139,7 +145,6 @@ def receive_form_data():
     recommendation = predict(response["student_info"], response["form_data"])
     
     recommendation = recommendation.numpy().tolist()
-    print(recommendation)
 
     return json.dumps(recommendation, default=str)
 

@@ -21,7 +21,7 @@ export default function DropDown({ label, name, onChange, value }) {
     } else if (label === 'Desired College') {
         options = ['Enter']
     } else if (label === 'Desired Field') {
-        options = ['STEM', 'Pre-Med', 'Social Sciences', 'Arts', 'Business/Econ', 'Humanities']
+        options = ['STEM', 'Pre-Med', 'Social Sciences', 'Arts/Humanities', 'Business/Econ', 'Pre-Law']
     } else if (label === 'First-Gen Status') {
         options = ['Yes', 'No']
     }
