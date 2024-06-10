@@ -1,10 +1,11 @@
 from flask import Flask, jsonify, send_from_directory, request, json
-import numpy
+import numpy as np
 from flask_cors import CORS
 import tensorflow as tf
 import mimetypes
 from studentDB import get_student_info  # Import the get_student_info function
 from college import Colleges
+from sklearn.preprocessing import MinMaxScaler
 
 mimetypes.add_type('application/javascript', '.jsx')
 
@@ -14,6 +15,8 @@ cors = CORS(app, origins="*")
 model_so = tf.keras.models.load_model('model/So.keras')
 model_jr = tf.keras.models.load_model('model/J.keras')
 model_sr = tf.keras.models.load_model('model/S.keras')
+
+scaler = MinMaxScaler()
 
 race_index = {'Asian/Pacific Islander':0, 'Black':1, 'Hispanic/Latinx':2, 'Native American':3, 'White':4}
 gender_index = {'Male':0, 'Female':1, 'Other':2}
@@ -57,8 +60,11 @@ def get_character(form_data):
         first_gen = [1]
     else:
         first_gen = [0]
+
+    # income_list = form_data["income"]
+    income = np.array(form_data["income"]).reshape(-1,1)
     
-    parental_earning = [form_data["income"]]
+    parental_earning = scaler.fit_transform(income).flatten().tolist()
 
     character = first_gen + parental_earning + race + gender
     return character
@@ -91,7 +97,10 @@ def get_courses_grades(student_info):
         for course, grade in courses:
             classes_grades[courses_index[course]] = 1
             grades.append(grade)
-
+        
+        grades = np.array(grades).reshape(-1,1)
+        grades = scaler.fit_transform(grades).flatten().tolist()
+        # print("HEYYYYYY ", grades)
         classes_grades.extend(grades)
     
     return classes_grades
@@ -150,7 +159,9 @@ def predict(student_info, form_data):
         model = model_sr
     
     # return model(courses_grades, character, college_want)
-    return model([tf.constant([courses_grades]), tf.constant([character]), tf.constant([college_want])])
+    return model([tf.constant([courses_grades], dtype=tf.float32), 
+                  tf.constant([character], dtype=tf.float32), 
+                  tf.constant([college_want], dtype=tf.float32)])
 
      
 # Running app
