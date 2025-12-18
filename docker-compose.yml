@@ -3,7 +3,7 @@ version: "3.9"
 services:
   backend:
     build: ./backend
-    container_name: ai-classrec-backend
+    container_name: web-backend
     ports:
       - "5000:5000"
     volumes:
@@ -14,7 +14,7 @@ services:
 
   frontend:
     build: ./frontend
-    container_name: ai-classrec-frontend
+    container_name: web-frontend
     ports:
       - "5173:5173"
     volumes:
