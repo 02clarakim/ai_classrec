@@ -1,4 +1,4 @@
-const courseList = [
+export const courseList = [
     ["English I"],
     ["English II"],
     ["English III"],
@@ -61,5 +61,3 @@ const courseList = [
     ["Spanish IV"],
     ["AP Spanish"]
 ];
-
-export default courseList;

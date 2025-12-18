@@ -1,4 +1,4 @@
-const Colleges = [
+export const Colleges = [
     'Princeton University',
     'Massachusetts Institute of Technology',
     'Harvard University',
@@ -166,5 +166,3 @@ const Colleges = [
     'University of Arkansas',
     'Washington State University'
 ];
-
-export default Colleges;

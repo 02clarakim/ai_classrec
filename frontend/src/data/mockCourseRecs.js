@@ -1,4 +1,4 @@
-const MockRecs = [
+export const MockRecs = [
     ["English I", 0],
     ["English II", 0],
     ["English III", 60.2],
@@ -61,5 +61,3 @@ const MockRecs = [
     ["Spanish IV", 4],
     ["AP Spanish", 0]
 ];
-
-export default MockRecs;

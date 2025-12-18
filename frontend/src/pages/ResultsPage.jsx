@@ -1,9 +1,9 @@
 import React from 'react';
 
-import ClassesTaken from "./ClassesTaken";
-import RecOutput from "./RecOutput";
-import bgImage from '../../assets/yonsei-bg.jpg';
-import { getStudentInfo  } from "../../assets/StudentDB";
+// import ClassesTaken from "./ClassesTaken";
+// import RecOutput from "./RecOutput";
+import bgImage from '../assets/yonsei-wallp.jpg';
+import { getStudentInfo  } from "../data/students";
 
 export default function ResultsPage({ inputData, classRecArr }) {    
     const inputID = inputData.studentID;

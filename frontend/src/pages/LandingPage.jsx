@@ -1,11 +1,11 @@
 import React from 'react';
 import { useState, useRef } from 'react';
 
-import DropDown from './DropDown';
-import AutoComplete from './AutoComplete';
-import bgImage from '../../assets/yonsei-bg.jpg';
-import ErrorMsg from '../ErrorMsg';
-import { getStudentInfo  } from "../../assets/StudentDB";
+import DropDown from '../components/landing/DropDown';
+import AutoComplete from '../components/landing/AutoComplete';
+import bgImage from '../assets/yonsei-wallp.jpg';
+import ErrorMsg from '../components/ErrorMsg';
+import { getStudentInfo  } from "../data/students";
 
 
 export default function LandingPage({ onGenerate }) {
