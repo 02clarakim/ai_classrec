@@ -1,12 +1,13 @@
 import { useState } from 'react';
 
 export default function DropDown({ label, name, onChange, value }) {
-    const [selectedValue, setSelctedValue] = useState(value);
+    const [selectedValue, setSelectedValue] = useState(value || "");
+    const [isDropdownVisible, setDropdownVisible] = useState(false);
 
-    function handleSelect(event) {
-        const val = event.target.value;
-        setSelctedValue(val);
-        onChange(name, val);
+    function handleSelect(option) {
+        setSelectedValue(option);
+        setDropdownVisible(false);
+        onChange(name, option);
     }
 
     let options = [];
@@ -26,24 +27,36 @@ export default function DropDown({ label, name, onChange, value }) {
     return (
         <div className="flex items-center gap-4">
             <label className="w-32 text-right text-sm font-medium">{label}</label>
-            <span className="flex flex-grow justify-end">
-                <select 
-                    value={selectedValue} 
-                    onChange={handleSelect} 
-                    className="flex-1 rounded-lg border border-gray-300 px-3 py-2 
-                                bg-white text-sm
-                                focus:outline-none focus:ring-1 focus:ring-teal-400"
-                > 
-                    <option value="" disabled>
-                        Select {label.toLowerCase()}
-                    </option>
-                    {options.map((option, index) => (
-                        <option key={index} value={option}>
-                            {option}
-                        </option>
+            <div className="flex-1 relative">
+                <input
+                value={selectedValue}
+                readOnly
+                placeholder={`Select ${label.toLowerCase()}`}
+                onFocus={() => setDropdownVisible(true)}
+                onBlur={() => setTimeout(() => setDropdownVisible(false), 100)}
+                className="w-full rounded-lg border text-sm border-gray-300 px-4 py-2 
+                            bg-white cursor-pointer
+                            focus:outline-none focus:ring-1 focus:ring-teal-400"
+                />
+
+                {isDropdownVisible && (
+                <ul
+                    className="absolute left-0 right-0 mt-1 max-h-48 overflow-y-auto 
+                            rounded-lg border border-gray-200 bg-white shadow-lg z-20"
+                >
+                    {options.map((option, i) => (
+                    <li
+                        key={i}
+                        onMouseDown={() => handleSelect(option)}
+                        className="px-4 py-2 cursor-pointer text-sm
+                                hover:bg-teal-50 hover:text-teal-700"
+                    >
+                        {option}
+                    </li>
                     ))}
-                </select>
-            </span>
+                </ul>
+                )}
+            </div>
         </div>
     );
 };

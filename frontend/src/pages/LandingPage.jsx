@@ -1,130 +1,103 @@
-import React from 'react';
-import { useState, useRef } from 'react';
+import React, { useState } from "react";
+import { StudentDB } from "@/data/students";
+import StudentCard from "@/components/StudentCard";
+import AuthModal from "@/components/AuthModal";
+import StudentDetailModal from "@/components/StudentDetailModal";
+import LandingForm from "@/components/landing/LandingForm";
+import campusBg from "@/assets/yonsei-wallp.jpg";
 
-import DropDown from '../components/landing/DropDown';
-import AutoComplete from '../components/landing/AutoComplete';
-import bgImage from '../assets/yonsei-wallp.jpg';
-import ErrorMsg from '../components/ErrorMsg';
-import { getStudentInfo  } from "../data/students";
+export default function LandingPage() {
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [detailStudent, setDetailStudent] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const handleStudentSelect = (student) => {
+    setSelectedStudent(student);
+  };
 
-export default function LandingPage({ onGenerate }) {
-    const error = useRef();
-
-    const [errorType, setErrorType] = useState('');
-
-    const [formData, setFormData] = useState({
-        studentID: '',
-        gender: '',
-        race: '',
-        desiredCollege: '',
-        desiredField: '',
-        firstGenStatus: '',
-        parentsIncome: ''
-    });
-
-    function handleInputChange(event) {
-        const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
-
-    function handleSelectChange(name, value) {
-        setFormData({
-            ...formData,
-            [name]: value
-        });
+  const handleViewDetails = (student) => {
+    setDetailStudent(student);
+    if (isAuthenticated) {
+      setShowDetailModal(true);
+    } else {
+      setShowAuthModal(true);
     }
+  };
 
-    async function handleGenerate() {
-        if (!getStudentInfo(formData.studentID)) {
-            setErrorType('invalidID');
-            error.current.open();
-            return;
-        }
+  const handleAuthSuccess = () => {
+    setIsAuthenticated(true);
+    setShowAuthModal(false);
+    setShowDetailModal(true);
+  };
 
-        for (const value of Object.values(formData)) {
-            if (value === '') {
-                setErrorType('incomplete');
-                error.current.open();
-                return;
-            }
-        }
-        
-        setErrorType('');
-        try {
-            const response = await fetch('http://127.0.0.1:5000/receiveData', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            // formData = studentData, data = recommended array
-            onGenerate(formData, data)
-        } catch (error) {
-            console.error('Error:', error);
-            setErrorType('network');
-            error.current.open();
-        }
-    }
+  return (
+    <div className="min-h-screen relative">
+      {/* Background */}
+      <div
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${campusBg})` }}
+      >
+        <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px]" />
+      </div>
 
-    return (
-        <>  
-            <ErrorMsg ref={error} buttonCaption="Close">
-                <h2 className="text-xl font-bold text-stone-700 my-4">
-                    {errorType === 'incomplete' ? 'Incomplete Input' : 
-                     errorType === 'invalidID' ? 'Invalid Student ID' : 
-                     'Network Error'}
-                </h2>
-                <p className="text-stone-600 mb-4">
-                    {errorType === 'incomplete' ? 'Please make sure you provide a valid value for every input field.' : 
-                     errorType === 'invalidID' ? 'Please enter a valid student ID.' : 
-                     'There was a problem with the network. Please try again later.'}
-                </p>
-            </ErrorMsg>
-            <div className="flex flex-col items-center justify-center h-screen bg-cover bg-center bg-opacity-10"
-            style={{ backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.5)), url(${bgImage})`}}
-            >
-                <h1 className="text-6xl mb-10 mt-10">AI Class Recommendation</h1>
-                <section className="w-3/5 rounded-xl bg-stone-200 p-10 flex flex-col items-center">
-                    <div className="p-2">
-                        <span className="mx-5">Student ID</span>
-                        <input
-                            type="number"
-                            className="pl-1"
-                            name="studentID"
-                            value={formData.studentID}
-                            onChange={handleInputChange}
-                        />
+      {/* Content */}
+      <div className="relative z-10 min-h-screen py-12 px-4">
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <header className="text-center mb-8 mt-6">
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-foreground mb-4">
+              AI Class Recommendation
+            </h1>
+            <p className="text-foreground text-lg max-w-2xl mx-auto">
+              Select a student to auto-fill their ID, or enter manually
+            </p>
+          </header>
+
+          {/* Student Cards */}
+          <section className="mb-4">
+            {/* <h2 className="font-display text-2xl font-semibold mb-6 text-center">
+              Available Students
+            </h2> */}
+            <div className="relative">
+              <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent pb-4">
+                <div className="flex gap-3 px-2 py-2">
+                  {StudentDB.map((student, index) => (
+                    <div key={student.sid} style={{ animationDelay: `${index * 50}ms` }}>
+                      <StudentCard
+                        student={student}
+                        onSelect={() => handleStudentSelect(student)}
+                        onViewDetails={() => handleViewDetails(student)}
+                        isSelected={selectedStudent?.sid === student.sid}
+                      />
                     </div>
-                    <div className="flex flex-wrap w-full">
-                        <DropDown label="Gender" name="gender" value={formData.gender} onChange={handleSelectChange} />
-                        <DropDown label="Race" name="race" value={formData.race} onChange={handleSelectChange} />
-                        <AutoComplete label="Desired College" name="desiredCollege" value={formData.desiredCollege} onChange={handleSelectChange} />
-                        <DropDown label="Desired Field" name="desiredField" value={formData.desiredField} onChange={handleSelectChange} />
-                        <DropDown label="First-Gen Status" name="firstGenStatus" value={formData.firstGenStatus} onChange={handleSelectChange} />
-                        <div className="relative w-1/2 p-2 flex">
-                            <span className="mr-3">Parents Income ($)</span> 
-                            <input
-                                className="ml-auto w-[16rem] pl-1"
-                                type="number"
-                                name="parentsIncome"
-                                value={formData.parentsIncome}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                    </div>
-                    <button onClick={handleGenerate} className="px-4 py-2 text-xs md:text-base rounded-md bg-teal-200 text-black hover:bg-teal-400 hover:text-stone-100 mt-5">Generate!</button>
-                </section>
+                  ))}
+                </div>
+              </div>
+              <div className="absolute right-0 top-0 bottom-4 w-12 bg-gradient-to-l from-background/80 to-transparent pointer-events-none" />
             </div>
-        </>
-        
-    );
+          </section>
+
+          <section>
+            <LandingForm selectedStudent={selectedStudent} />
+          </section>
+        </div>
+      </div>
+      <AuthModal
+        open={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={handleAuthSuccess}
+        studentName={detailStudent?.name || ""}
+      />
+
+      {detailStudent && (
+        <StudentDetailModal
+          open={showDetailModal}
+          onClose={() => setShowDetailModal(false)}
+          student={detailStudent}
+        />
+      )}
+    </div>
+  );
 }

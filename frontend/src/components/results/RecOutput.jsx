@@ -1,41 +1,25 @@
-import React from 'react';
+import React from "react";
 
-import SingleOutput from "./SingleOutput";
-
-// import MockRecs from "../../assets/MockCourseRecs";
-import courseList from "../../assets/CourseList";
-
-export default function RecOutput({ classRecArr, grade }) {
-    classRecArr = classRecArr[0].slice(0, 61);
-    const processedCourse = courseList.map((course, index) => [course[0], classRecArr[index] * 100]);
-
-    const filteredRecs = processedCourse.filter(info => (info[1] >= 5));
-    const sortedRecs = filteredRecs.sort((a,b) => b[1] - a[1]);
-
-    let nextyr = ""
-    if (grade == 'Freshman') {
-        nextyr = 'Sophomore';
-    } else if (grade == 'Sophomore') {
-        nextyr = 'Junior';
-    } else {
-        nextyr = 'Senior';
-    }
-
-    return (
-        <div className="rounded-xl bg-cyan-100 w-full p-4 outline outline-2 outline-stone-400">
-            <div className="p-3">
-                <h2 className="text-center text-xl">Showing Classes for</h2>
-                <h2 className="font-bold text-center text-xl">{nextyr} Year</h2>
-                <p className="text-right mr-5 text-stone-500">%</p>
-                <section className="p-2.5">
-                    {
-                        // HERE IS WHERE I WANT TO USE THE JSONIFY OUTPUT AND USE IT TO DISPLAY ON PAGE
-                        sortedRecs.map(([courseName, percent], index) => (
-                            <SingleOutput key={index} courseName={courseName} percent={percent.toFixed(1)}/>
-                        ))
-                    }
-                </section>
+export default function RecommendationGraph({ courses, getBarColor }) {
+  return (
+    <div className="bg-amber-50/70 rounded-xl shadow p-6 mb-8">
+      <div className="max-h-[24rem] overflow-y-auto space-y-2">
+        {courses.map((course, index) => (
+          <div key={index} className="flex items-center gap-3">
+            <p className="w-48 text-sm">{course.name}</p>
+            <div className="h-4 flex-1 rounded bg-gray-200 overflow-hidden">
+              <div
+                className="h-4 progress-box"
+                style={{
+                  "--target-width": `${course.probability}%`,
+                  backgroundColor: getBarColor(course.probability),
+                }}
+              />
             </div>
-        </div>
-    )
+            <p className="w-12 text-right text-sm fade-in">{course.probability.toFixed(1)}%</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
