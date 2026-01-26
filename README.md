@@ -2,10 +2,9 @@
 
 A web application that predicts suitable courses and college recommendations for students using machine learning models. The project consists of a **frontend** (React/Node) and a **backend** (Flask + TensorFlow).
 
----
 
 ## 🖥 Project Structure
-
+```
 ai_classrec/
 ├─ backend/ # Flask API + ML models
 │ ├─ server.py
@@ -19,7 +18,7 @@ ai_classrec/
 │ └─ Dockerfile
 ├─ docker-compose.yml
 └─ README.md
-
+```
 ## ⚡ Features
 
 - Predict student performance and course recommendations.
@@ -27,7 +26,6 @@ ai_classrec/
 - Fully containerized using Docker for easy deployment.
 - Deployable on [Render](https://render.com/) for free hosting.
 
----
 
 ## 🚀 Local Development
 
