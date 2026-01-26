@@ -7,6 +7,9 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 5173
+RUN npm run build
+RUN npm install -g serve
 
-CMD ["npm", "run", "dev", "--", "--host"]
+EXPOSE 3000
+CMD serve -s dist -l $PORT
+
