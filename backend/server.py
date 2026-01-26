@@ -2,19 +2,21 @@ from flask import Flask, jsonify, send_from_directory, request, json
 import numpy as np
 from flask_cors import CORS
 import tensorflow as tf
-import mimetypes
-from studentDB import get_student_info  # Import the get_student_info function
+import os
+from studentDB import get_student_info
 from college import Colleges
 from sklearn.preprocessing import MinMaxScaler
 
-mimetypes.add_type('application/javascript', '.jsx')
 
-app = Flask(__name__, static_folder='static', static_url_path='')
+app = Flask(__name__)
 cors = CORS(app, origins="*")
 
-# model_so = tf.keras.models.load_model('model/So.keras')
-# model_jr = tf.keras.models.load_model('model/J.keras')
-# model_sr = tf.keras.models.load_model('model/S.keras')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_DIR = os.path.join(BASE_DIR, "model")
+
+MODEL_SO = tf.keras.models.load_model(os.path.join(MODEL_DIR, "So.keras"))
+MODEL_J = tf.keras.models.load_model(os.path.join(MODEL_DIR, "J.keras"))
+MODEL_S = tf.keras.models.load_model(os.path.join(MODEL_DIR, "S.keras"))
 
 scaler = MinMaxScaler()
 
@@ -148,8 +150,7 @@ def receive_form_data():
 
     return json.dumps(recommendation, default=str)
 
-# Define a function to handle the prediction
-@tf.function
+#prediction
 def predict(student_info, form_data):
 
     character = get_character(form_data)
@@ -157,18 +158,22 @@ def predict(student_info, form_data):
     courses_grades = get_courses_grades(student_info)
     
     if student_info["level"] == "Freshman":
-        model = tf.keras.models.load_model('model/So.keras')
+        model = MODEL_SO
     elif student_info["level"] == "Sophomore":
-        model = tf.keras.models.load_model('model/J.keras')
+        model = MODEL_J
     else:
-        model = tf.keras.models.load_model('model/S.keras')
-    
+        model = MODEL_S
+
     # return model(courses_grades, character, college_want)
     return model([tf.constant([courses_grades], dtype=tf.float32), 
                   tf.constant([character], dtype=tf.float32), 
                   tf.constant([college_want], dtype=tf.float32)])
 
      
+@app.route("/health")
+def health():
+    return jsonify({"status": "ok"})
+
 # Running app
 if __name__ == '__main__':
     app.run(debug=True)
