@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL;
+const API_BASE = "https://ai-classrec-backend.onrender.com";
 
 export async function generateRecommendation(formData) {
   const res = await fetch(`${API_BASE}/receiveData`, {
