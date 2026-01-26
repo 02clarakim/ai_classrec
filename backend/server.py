@@ -12,9 +12,9 @@ mimetypes.add_type('application/javascript', '.jsx')
 app = Flask(__name__, static_folder='static', static_url_path='')
 cors = CORS(app, origins="*")
 
-model_so = tf.keras.models.load_model('model/So.keras')
-model_jr = tf.keras.models.load_model('model/J.keras')
-model_sr = tf.keras.models.load_model('model/S.keras')
+# model_so = tf.keras.models.load_model('model/So.keras')
+# model_jr = tf.keras.models.load_model('model/J.keras')
+# model_sr = tf.keras.models.load_model('model/S.keras')
 
 scaler = MinMaxScaler()
 
@@ -156,12 +156,12 @@ def predict(student_info, form_data):
     college_want = get_college(form_data)
     courses_grades = get_courses_grades(student_info)
     
-    if (student_info["level"] == 'Freshman'):
-        model = model_so
-    elif (student_info["level"] == 'Sophomore'):
-        model = model_jr
+    if student_info["level"] == "Freshman":
+        model = tf.keras.models.load_model('model/So.keras')
+    elif student_info["level"] == "Sophomore":
+        model = tf.keras.models.load_model('model/J.keras')
     else:
-        model = model_sr
+        model = tf.keras.models.load_model('model/S.keras')
     
     # return model(courses_grades, character, college_want)
     return model([tf.constant([courses_grades], dtype=tf.float32), 
