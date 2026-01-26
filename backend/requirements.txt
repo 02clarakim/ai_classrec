@@ -1,6 +1,7 @@
-flask
-flask-cors
-numpy
-tensorflow
-scikit-learn
-gunicorn
+flask==3.1.2
+flask-cors==6.0.2
+gunicorn==24.1.1
+numpy==2.2.6
+pandas==2.1.1
+scikit-learn==1.7.2
+tensorflow-cpu==2.20

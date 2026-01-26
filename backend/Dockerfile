@@ -11,10 +11,16 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt \
-    && pip install --no-cache-dir tensorflow-cpu==2.20
+
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir tensorflow-cpu==2.20 -r requirements.txt
+
 COPY . .
 
 EXPOSE 5000
 
-CMD gunicorn server:app --bind 0.0.0.0:$PORT
+CMD gunicorn server:app \
+    --bind 0.0.0.0:$PORT \
+    --workers 1 \
+    --threads 1 \
+    --timeout 120
