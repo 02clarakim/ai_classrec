@@ -25,7 +25,6 @@ ai_classrec/
 - Predict student performance and course recommendations.
 - Suggest suitable colleges based on student profile.
 - Fully containerized using Docker for easy deployment.
-- Deployable on [Render](https://render.com/) for free hosting.
 
 
 ## 🚀 Local Development
