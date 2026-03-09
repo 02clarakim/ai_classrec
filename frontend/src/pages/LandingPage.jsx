@@ -62,7 +62,7 @@ export default function LandingPage() {
             </h2> */}
             <div className="relative">
               <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent pb-4">
-                <div className="flex gap-3 px-2 py-2">
+                <div className="flex gap-3 px-2 py-2 justify-center min-w-max mx-auto">
                   {StudentDB.map((student, index) => (
                     <div key={student.sid} style={{ animationDelay: `${index * 50}ms` }}>
                       <StudentCard
