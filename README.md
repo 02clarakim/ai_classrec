@@ -1,4 +1,4 @@
-<img width="3080" height="1951" alt="image" src="https://github.com/user-attachments/assets/4deceaf2-3357-4882-b3e3-c30f9c9f7b63" /># AI Class Recommendation System
+# AI Class Recommendation System
 
 A web application that predicts suitable courses and college recommendations for students using machine learning models. The project consists of a **frontend** (React/Node) and a **backend** (Flask + TensorFlow).
 
